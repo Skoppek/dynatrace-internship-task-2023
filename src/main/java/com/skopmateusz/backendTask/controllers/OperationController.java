@@ -1,29 +1,17 @@
 package com.skopmateusz.backendTask.controllers;
 
-import com.skopmateusz.backendTask.errorHandlers.ApiError;
 import com.skopmateusz.backendTask.models.responses.AverageExchangeRateResponse;
 import com.skopmateusz.backendTask.models.responses.BuySellMajorDifferenceResponse;
 import com.skopmateusz.backendTask.models.responses.MaxMinAverageExchangeRateResponse;
 import com.skopmateusz.backendTask.service.NbpService;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -34,7 +22,6 @@ public class OperationController {
     private NbpService nbpService;
 
     @GetMapping(value = "/avg-ex-rate/{date}/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<Object> getAverageExchangeRate(
             @PathVariable("date") @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}",
                     message = "Date format should be: YYYY-MM-DD") String date,
@@ -46,7 +33,6 @@ public class OperationController {
     }
 
     @GetMapping(value = "/avg-value/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<Object> getAverageValue(
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,
@@ -57,7 +43,6 @@ public class OperationController {
     }
 
     @GetMapping(value = "/buy-ask-diff/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<Object> getBuyAskDifference(
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,

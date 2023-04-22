@@ -31,6 +31,4 @@ public class NbpRestTemplateResponseErrorHandler implements ResponseErrorHandler
             }
         }
     }
-
-
 }

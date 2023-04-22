@@ -16,5 +16,4 @@ public class BackendTaskApplication {
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
-
 }
