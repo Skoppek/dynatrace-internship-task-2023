@@ -23,13 +23,13 @@ public class OperationController {
 
     @GetMapping(value = "/avg-ex-rate/{date}/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getAverageExchangeRate(
+    public ResponseEntity<Object> getAverageExchangeRate(
             @PathVariable("date") @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}") String date,
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}") String code
     ) {
         try {
             Double result = nbpService.getAvgRates(code, date);
-            return ResponseEntity.ok(result.toString());
+            return ResponseEntity.ok(result);
         } catch (RestClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -37,13 +37,13 @@ public class OperationController {
 
     @GetMapping(value = "/avg-value/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getAverageValue(
+    public ResponseEntity<Object> getAverageValue(
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}") String code,
             @RequestParam("quotations") @Min(0) @Max(255) Integer numOfQuotations
     ) {
         try {
             MaxMinAvgRate result = nbpService.getLastAvgRates(code, numOfQuotations);
-            return ResponseEntity.ok(result.toString());
+            return ResponseEntity.ok(result);
         } catch (RestClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
