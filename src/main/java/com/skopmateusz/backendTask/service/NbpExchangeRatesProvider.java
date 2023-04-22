@@ -1,7 +1,9 @@
 package com.skopmateusz.backendTask.service;
 
-import com.skopmateusz.backendTask.models.ExchangeTable;
-import com.skopmateusz.backendTask.models.Rate;
+import com.skopmateusz.backendTask.models.BuySellRatesTable;
+import com.skopmateusz.backendTask.models.ExchangeRatesTable;
+import com.skopmateusz.backendTask.models.AverageRate;
+import com.skopmateusz.backendTask.models.BuySellRate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -18,25 +20,32 @@ public class NbpExchangeRatesProvider {
         this.restTemplate = restTemplate;
     }
 
-    public List<Rate> getAverageRatesOfDate(String date, String currency) {
+    public List<AverageRate> getAverageRatesOfDate(String date, String currency) {
         String queryPath = String.format("%s/%s/%s", exchangeTableName, currency, date);
-        return queryNbp(queryPath);
+        return getExchangeRatesTable(queryPath);
     }
 
-    public List<Rate> getLastAverageRates(String currency, Integer numOfQuotations) {
+    public List<AverageRate> getLastAverageRates(String currency, Integer numOfQuotations) {
         String queryPath = String.format("%s/%s/last/%s", exchangeTableName, currency, numOfQuotations);
-        return queryNbp(queryPath);
+        return getExchangeRatesTable(queryPath);
     }
 
-    public List<Rate> getLastBuySellRates(String currency, Integer numOfQuotations) {
+    public List<BuySellRate> getLastBuySellRates(String currency, Integer numOfQuotations) {
         String queryPath = String.format("%s/%s/last/%s", buySellTableName, currency, numOfQuotations);
-        return queryNbp(queryPath);
+        return getBuySellTable(queryPath);
     }
 
-    private List<Rate> queryNbp(String queryPath) {
+    private List<AverageRate> getExchangeRatesTable(String queryPath) {
         String endPoint = NBP_EXCHANGE_RATES_API_URL + queryPath;
-        ResponseEntity<ExchangeTable> tableResponse =
-                restTemplate.exchange(endPoint, HttpMethod.GET, null, ExchangeTable.class);
+        ResponseEntity<ExchangeRatesTable> tableResponse =
+                restTemplate.getForEntity(endPoint, ExchangeRatesTable.class);
+        return tableResponse.getBody().rates();
+    }
+
+    private List<BuySellRate> getBuySellTable(String queryPath) {
+        String endPoint = NBP_EXCHANGE_RATES_API_URL + queryPath;
+        ResponseEntity<BuySellRatesTable> tableResponse =
+                restTemplate.getForEntity(endPoint, BuySellRatesTable.class);
         return tableResponse.getBody().rates();
     }
 }
