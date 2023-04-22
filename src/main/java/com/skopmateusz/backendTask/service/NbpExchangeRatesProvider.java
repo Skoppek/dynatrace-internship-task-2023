@@ -1,51 +1,44 @@
 package com.skopmateusz.backendTask.service;
 
-import com.skopmateusz.backendTask.models.BuySellRatesTable;
-import com.skopmateusz.backendTask.models.ExchangeRatesTable;
+import com.skopmateusz.backendTask.errorHandlers.NbpException;
 import com.skopmateusz.backendTask.models.AverageRate;
+import com.skopmateusz.backendTask.models.AverageRatesTable;
 import com.skopmateusz.backendTask.models.BuySellRate;
-import org.springframework.http.HttpMethod;
+import com.skopmateusz.backendTask.models.BuySellRatesTable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 public class NbpExchangeRatesProvider {
-    final String NBP_EXCHANGE_RATES_API_URL = "http://api.nbp.pl/api/exchangerates/rates/";
-    final String exchangeTableName = "A";
-    final String buySellTableName = "C";
+    final String NBP_EXCHANGE_RATES_API_URL;
     final RestTemplate restTemplate;
 
-    public NbpExchangeRatesProvider(RestTemplate restTemplate) {
+    public NbpExchangeRatesProvider(String nbpUrl, RestTemplate restTemplate) {
+        this.NBP_EXCHANGE_RATES_API_URL = nbpUrl;
         this.restTemplate = restTemplate;
     }
 
-    public List<AverageRate> getAverageRatesOfDate(String date, String currency) {
-        String queryPath = String.format("%s/%s/%s", exchangeTableName, currency, date);
-        return getExchangeRatesTable(queryPath);
-    }
-
-    public List<AverageRate> getLastAverageRates(String currency, Integer numOfQuotations) {
-        String queryPath = String.format("%s/%s/last/%s", exchangeTableName, currency, numOfQuotations);
-        return getExchangeRatesTable(queryPath);
-    }
-
-    public List<BuySellRate> getLastBuySellRates(String currency, Integer numOfQuotations) {
-        String queryPath = String.format("%s/%s/last/%s", buySellTableName, currency, numOfQuotations);
-        return getBuySellTable(queryPath);
-    }
-
-    private List<AverageRate> getExchangeRatesTable(String queryPath) {
+    public List<AverageRate> getAverageRates(String queryPath) {
         String endPoint = NBP_EXCHANGE_RATES_API_URL + queryPath;
-        ResponseEntity<ExchangeRatesTable> tableResponse =
-                restTemplate.getForEntity(endPoint, ExchangeRatesTable.class);
+        ResponseEntity<AverageRatesTable> tableResponse =
+                restTemplate.getForEntity(endPoint, AverageRatesTable.class);
+
+        if (tableResponse.getBody() == null) {
+            throw new NbpException(HttpStatus.INTERNAL_SERVER_ERROR, "NBP response is null");
+        }
         return tableResponse.getBody().rates();
     }
 
-    private List<BuySellRate> getBuySellTable(String queryPath) {
+    public List<BuySellRate> getBuySellRates(String queryPath) {
         String endPoint = NBP_EXCHANGE_RATES_API_URL + queryPath;
         ResponseEntity<BuySellRatesTable> tableResponse =
                 restTemplate.getForEntity(endPoint, BuySellRatesTable.class);
+
+        if (tableResponse.getBody() == null) {
+            throw new NbpException(HttpStatus.INTERNAL_SERVER_ERROR, "NBP response is null");
+        }
         return tableResponse.getBody().rates();
     }
 }
