@@ -1,6 +1,8 @@
 package com.skopmateusz.backendTask.service;
 
-import com.skopmateusz.backendTask.models.MaxMinAvgRate;
+import com.skopmateusz.backendTask.models.responses.AverageExchangeRateResponse;
+import com.skopmateusz.backendTask.models.responses.BuySellMajorDifferenceResponse;
+import com.skopmateusz.backendTask.models.responses.MaxMinAverageExchangeRateResponse;
 import com.skopmateusz.backendTask.models.AverageRate;
 import com.skopmateusz.backendTask.models.BuySellRate;
 import org.springframework.stereotype.Service;
@@ -18,27 +20,29 @@ public class NbpService {
         this.nbpExchangeRatesProvider = new NbpExchangeRatesProvider(restTemplate);
     }
 
-    public Double getAvgRates(String currencyCode, String date) {
+    public AverageExchangeRateResponse getAvgRate(String currencyCode, String date) {
         List<AverageRate> rates = nbpExchangeRatesProvider.getAverageRatesOfDate(date, currencyCode);
-        return rates.stream()
+        Double average = rates.stream()
                 .mapToDouble(AverageRate::mid)
                 .average()
                 .orElse(Double.NaN);
+        return new AverageExchangeRateResponse(average);
     }
 
-    public MaxMinAvgRate getLastAvgRates(String currency, Integer numOfQuotations) {
+    public MaxMinAverageExchangeRateResponse getLastMaxMinAvgRates(String currency, Integer numOfQuotations) {
         List<AverageRate> rates = nbpExchangeRatesProvider.getLastAverageRates(currency, numOfQuotations);
         rates.sort(Comparator.comparing(AverageRate::mid));
         Double max = rates.get(rates.size()-1).mid();
-        Double min = ((AverageRate)rates.get(0)).mid();
-        return new MaxMinAvgRate(max, min);
+        Double min = rates.get(0).mid();
+        return new MaxMinAverageExchangeRateResponse(max, min);
     }
 
-    public Double getLastBuySellRates(String currency, Integer numOfQuotations) {
+    public BuySellMajorDifferenceResponse getLastBuySellDifference(String currency, Integer numOfQuotations) {
         List<BuySellRate> rates = nbpExchangeRatesProvider.getLastBuySellRates(currency, numOfQuotations);
-        return rates.stream()
+        Double difference =  rates.stream()
                 .map(rate -> rate.bid() - rate.ask())
                 .max(Double::compareTo)
                 .orElse(Double.NaN);
+        return new BuySellMajorDifferenceResponse(difference);
     }
 }
