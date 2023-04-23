@@ -4,7 +4,6 @@ import com.skopmateusz.backendTask.models.responses.AverageExchangeRateResponse;
 import com.skopmateusz.backendTask.models.responses.BuySellMajorDifferenceResponse;
 import com.skopmateusz.backendTask.models.responses.MaxMinAverageExchangeRateResponse;
 import com.skopmateusz.backendTask.service.NbpService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.Max;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class OperationController {
 
-    private NbpService nbpService;
+    final private NbpService nbpService;
 
     @Autowired
     public OperationController(NbpService nbpService) {
