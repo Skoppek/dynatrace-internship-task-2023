@@ -31,13 +31,13 @@
 1. Pull the image
 
  ```
- docker pull skoppek/skop_intern_backend_task
+ docker pull skoppek/skop_dynatrace_intern_task
  ```
 
 2. Run the docker image
 
  ```
- docker run -p 8080:8080 skop_intern_backend_task
+ docker run -p 8080:8080 skoppek/skop_dynatrace_intern_task
  ```
 
 # Usage
