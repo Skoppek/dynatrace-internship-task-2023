@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class OperationController {
 
-    @Autowired
     private NbpService nbpService;
+
+    @Autowired
+    public OperationController(NbpService nbpService) {
+        this.nbpService = nbpService;
+    }
 
     @GetMapping(value = "/avg-ex-rate/{date}/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAverageExchangeRate(
@@ -36,7 +40,7 @@ public class OperationController {
     public ResponseEntity<Object> getAverageValue(
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,
-            @RequestParam("quotations") @Min(0) @Max(255) Integer numOfQuotations
+            @RequestParam("quotations") @Min(1) @Max(255) Integer numOfQuotations
     ) {
         MaxMinAverageExchangeRateResponse body = nbpService.getLastMaxMinAvgRates(code, numOfQuotations);
         return ResponseEntity.ok(body);
@@ -44,9 +48,9 @@ public class OperationController {
 
     @GetMapping(value = "/buy-ask-diff/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getBuyAskDifference(
-            @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}",
+            @PathVariable("code") @Pattern(regexp = "^[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,
-            @RequestParam("quotations") @Min(0) @Max(255) Integer numOfQuotations
+            @RequestParam("quotations") @Min(1) @Max(255) Integer numOfQuotations
     ) {
         BuySellMajorDifferenceResponse body = nbpService.getLastBuySellDifference(code, numOfQuotations);
         return ResponseEntity.ok(body);
