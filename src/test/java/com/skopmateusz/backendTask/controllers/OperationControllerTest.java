@@ -24,7 +24,7 @@ class OperationControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"2022.09.09", "09-09-2022", "010101"})
     void wrongDateFormatTest(String date) throws Exception {
-        mockMvc.perform(get(String.format("/average-exchange-rate/usd/%s", date)))
+        mockMvc.perform(get(String.format("/average-exchange-rate/code/usd/date/%s", date)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -32,21 +32,21 @@ class OperationControllerTest {
     @ParameterizedTest
     @CsvSource({"2022-01-03,xxx", "2022-01-01,usd"})
     void notFoundDataTest(String date, String code) throws Exception {
-        mockMvc.perform(get(String.format("/average-exchange-rate/%s/%s", code, date)))
+        mockMvc.perform(get(String.format("/average-exchange-rate/code/%s/date/%s", code, date)))
                 .andExpect(status().isNotFound());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"USDD", "E3R", "P", "PL"})
     void wrongCurrencyCodeFormatTest(String code) throws Exception {
-        mockMvc.perform(get(String.format("/average-exchange-rate/%s/2023-04-21", code)))
+        mockMvc.perform(get(String.format("/average-exchange-rate/code/%s/date/2023-04-21", code)))
                 .andExpect(status().isBadRequest());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {-1, Integer.MIN_VALUE, 256, Integer.MAX_VALUE})
     void wrongQuotationsTest(int quotations) throws Exception {
-        mockMvc.perform(get(String.format("/max-min-average-value/usd?quotations=%d", quotations)))
+        mockMvc.perform(get(String.format("/max-min-average-value/code/usd?quotations=%d", quotations)))
                 .andExpect(status().isBadRequest());
     }
 }
