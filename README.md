@@ -1,3 +1,9 @@
+# Task for Dynatrace Summer Internship 2023
+## Backend Oriented Task
+- [Task descriptions and requirements](https://github.com/joaquinfilipic-dynatrace/gdn-internship-2023)
+- Author: Mateusz Skop
+- Used Technology: Spring Boot
+
 # Installation
 ## Using .jar file
 
@@ -36,7 +42,7 @@
 
 # Usage
 ## Swagger UI
-To use application's Swagger UI interface use http://localhost:8080/swagger-ui/index.html endpoint.
+To use application's Swagger UI interface go to http://localhost:8080/swagger-ui/index.html.
 
 # Endpoints
 1. The average exchange rate for given currency code on a given date
@@ -149,5 +155,11 @@ Example result (this result was taken on 2023-04-24 00:30):
         "Wrong query parameters."
     ]
 }
+```
+# Testing
+The project has a few unit and integration tests.  
+To run the tests use this command:
+```
+mvn test
 ```
 
