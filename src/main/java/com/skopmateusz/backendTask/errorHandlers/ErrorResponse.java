@@ -7,19 +7,19 @@ import java.util.List;
 
 public class ErrorResponse {
     private HttpStatus status;
-    private String message;
+    private List<String> messages;
 
-    public ErrorResponse(HttpStatus status, String message) {
+    public ErrorResponse(HttpStatus status, List<String> messages) {
         super();
         this.status = status;
-        this.message = message;
+        this.messages = messages;
     }
 
     public HttpStatus getStatus() {
         return status;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessage() {
+        return messages;
     }
 }

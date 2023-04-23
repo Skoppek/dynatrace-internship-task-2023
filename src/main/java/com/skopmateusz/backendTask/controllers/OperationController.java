@@ -25,7 +25,7 @@ public class OperationController {
         this.nbpService = nbpService;
     }
 
-    @GetMapping(value = "/avg-ex-rate/{date}/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/average-exchange-rate/code/{code}/date/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAverageExchangeRate(
             @PathVariable("date") @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}",
                     message = "Date format should be: YYYY-MM-DD") String date,
@@ -36,7 +36,7 @@ public class OperationController {
         return ResponseEntity.ok(body);
     }
 
-    @GetMapping(value = "/avg-value/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/max-min-average-value/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAverageValue(
             @PathVariable("code") @Pattern(regexp = "[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,
@@ -46,7 +46,7 @@ public class OperationController {
         return ResponseEntity.ok(body);
     }
 
-    @GetMapping(value = "/buy-ask-diff/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/buy-sell-difference/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getBuyAskDifference(
             @PathVariable("code") @Pattern(regexp = "^[a-zA-Z]{3}",
                     message = "Provide 3 letter currency code (ISO-4217)") String code,
@@ -54,5 +54,10 @@ public class OperationController {
     ) {
         BuySellMajorDifferenceResponse body = nbpService.getLastBuySellDifference(code, numOfQuotations);
         return ResponseEntity.ok(body);
+    }
+
+    @RequestMapping("/error")
+    public String handleError() {
+        return "Something went wrong...";
     }
 }
