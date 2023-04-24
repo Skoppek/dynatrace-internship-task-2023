@@ -5,28 +5,6 @@
 - Used Technology: Spring Boot
 
 # Installation
-## Using .jar file
-
-1. Clone the repo
-
- ```
- git clone https://github.com/Skoppek/dynatrace-internship-task-2023.git
- ```
-
-2. Run the application 
-
-> using **java -jar** command
->  ```
->  java -jar target/backendTask-1.0.0.jar
->  ```
-
-  **OR**  
-  
->  using **mvn spring-boot:run** command
->  ```
->  mvn spring-boot:run
->  ```
-
 ## Using Docker
 1. Pull the image
 
@@ -39,6 +17,40 @@
  ```
  docker run -p 8080:8080 skoppek/skop_dynatrace_intern_task
  ```
+
+## Using .jar file
+
+1. Clone the repo
+
+```
+git clone https://github.com/Skoppek/dynatrace-internship-task-2023.git
+```
+
+2. Enter the project
+
+```
+cd dynatrace-internship-task-2023/
+```
+
+3. Install the project with Maven
+
+```
+mvn install
+```
+
+4. Run the application 
+
+>  using **mvn spring-boot:run** command
+>  ```
+>  mvn spring-boot:run
+>  ```
+
+  **OR** 
+  
+>  using **java -jar** command
+>  ```
+>  java -jar target/backendTask-1.0.0.jar
+>  ```
 
 # Usage
 ## Swagger UI
