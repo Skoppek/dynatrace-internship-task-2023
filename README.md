@@ -117,7 +117,7 @@ Example result (this result was taken on 2023-04-24 00:30):
 }
 ```
 # Errors
-* Wrong date or currency format or number of quotations beyond <1, 255> range will return one this responses:
+* Wrong date or currency format or number of quotations beyond <1, 255> range will return one these responses:
 ```json
 {
     "status": "BAD_REQUEST",
